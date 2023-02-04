@@ -57,6 +57,8 @@ struct LogConsumed: View {
     var body: some View {
         NavigationView {
             VStack {
+                Spacer()
+                
                 Slider(value: $AmountToAdd, in: 0...8, step: 1.0) {
                     Text("Amount")
                 } minimumValueLabel: {
@@ -65,10 +67,34 @@ struct LogConsumed: View {
                     Text("8oz")
                 }
                 .padding()
+                
+                Spacer()
 
+                Button {
+//                    ShowAddConsumed = true
+                } label: {
+                    HStack {
+                        Text("Log \(AmountToAdd.formatted(.number)) \(AmountToAdd == 1 ? "ounce" : "ounces")")
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(AmountToAdd == 0)
+                .frame(maxWidth: .infinity)
+                .padding()
+                
             }
             .navigationTitle("Log Consumption")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                    .foregroundColor(.red)
+                    
+                }
+            }
         }
         
         
@@ -101,7 +127,6 @@ struct MainView: View {
                 
                 Button {
                     ShowAddConsumed = true
-//                    Consumed += 10
                 } label: {
                     HStack {
                         Text("Log ")
@@ -127,6 +152,7 @@ struct MainView: View {
         .sheet(isPresented: $ShowAddConsumed) {
             LogConsumed()
                 .presentationDetents([.medium])
+                .interactiveDismissDisabled(true)
         }
         
         

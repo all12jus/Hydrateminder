@@ -13,6 +13,7 @@
 		D02DAE94298DE1DE00AF3512 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D02DAE93298DE1DE00AF3512 /* Preview Assets.xcassets */; };
 		D02DAE96298DE1DE00AF3512 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02DAE95298DE1DE00AF3512 /* Persistence.swift */; };
 		D02DAE99298DE1DE00AF3512 /* Hydrateminder.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D02DAE97298DE1DE00AF3512 /* Hydrateminder.xcdatamodeld */; };
+		D02DAEA1298DE23900AF3512 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02DAEA0298DE23900AF3512 /* MainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		D02DAE95298DE1DE00AF3512 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		D02DAE98298DE1DE00AF3512 /* Hydrateminder.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Hydrateminder.xcdatamodel; sourceTree = "<group>"; };
 		D02DAE9A298DE1DE00AF3512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D02DAEA0298DE23900AF3512 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				D02DAE9A298DE1DE00AF3512 /* Info.plist */,
 				D02DAE97298DE1DE00AF3512 /* Hydrateminder.xcdatamodeld */,
 				D02DAE92298DE1DE00AF3512 /* Preview Content */,
+				D02DAEA0298DE23900AF3512 /* MainView.swift */,
 			);
 			path = Hydrateminder;
 			sourceTree = "<group>";
@@ -148,6 +151,7 @@
 				D02DAE96298DE1DE00AF3512 /* Persistence.swift in Sources */,
 				D02DAE8F298DE1DC00AF3512 /* ContentView.swift in Sources */,
 				D02DAE99298DE1DE00AF3512 /* Hydrateminder.xcdatamodeld in Sources */,
+				D02DAEA1298DE23900AF3512 /* MainView.swift in Sources */,
 				D02DAE8D298DE1DC00AF3512 /* HydrateminderApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

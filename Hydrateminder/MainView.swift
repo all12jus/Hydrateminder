@@ -171,14 +171,46 @@ struct HistoryLogView: View {
             ForEach(items) { item in
                  
                 // if is today, don't show
+                if let date = item.date {
+                    if date.isToday {
+//                        Text("Today \(item.consumed.formatted(.number)) ounces / \(item.goal.formatted(.number)) ounces")
+                        ItemEntryToday(item)
+                    }
+                    else {
+//                        Text("\(item.date?.formatted(date: .abbreviated, time: .omitted) ?? "Unknown Date") \(item.consumed.formatted(.number)) ounces / \(item.goal.formatted(.number)) ounces")
+                        
+                        ItemEntry(item)
+                    }
+                }
                 
                 
-                Text("\(item.date?.formatted(date: .abbreviated, time: .omitted) ?? "Unknown Date") \(item.consumed.formatted(.number)) ounces / \(item.goal.formatted(.number)) ounces")
+                
             }
             
             
         }
     }
+    
+    @ViewBuilder
+    func ItemEntryToday(_ item: Consumption) -> some View {
+        HStack {
+            Text("Today")
+            Spacer()
+            Text(" \(item.consumed.formatted(.number)) ounces / \(item.goal.formatted(.number)) ounces")
+        }
+    }
+    
+    
+    @ViewBuilder
+    func ItemEntry(_ item: Consumption) -> some View {
+        HStack {
+            Text("\(item.date?.formatted(date: .abbreviated, time: .omitted) ?? "Unknown Date")")
+            Spacer()
+            Text(" \(item.consumed.formatted(.number)) ounces / \(item.goal.formatted(.number)) ounces")
+        }
+    }
+    
+    
 }
 
 struct SettingsView: View {
@@ -195,6 +227,10 @@ struct SettingsView: View {
 extension Date {
     var startOfDay: Date {
         return Calendar.current.startOfDay(for: self)
+    }
+    
+    var isToday: Bool {
+        return Calendar.current.isDateInToday(self)
     }
     
     var endOfDay: Date {

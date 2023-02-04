@@ -232,7 +232,7 @@ struct SettingsView: View {
     var body: some View {
         
         List {
-            Text("Settings View Coming soon.")
+//            Text("Settings View Coming soon.")
             
             
             
@@ -417,6 +417,9 @@ struct MainView: View {
                 Spacer()
                 VStack {
                     ProgressCircle(Percentage: Percentage)
+                        .onTapGesture {
+                            ShowAddConsumed = true
+                        }
                     
                     Text("\(Consumed.formatted(.number))oz / \(Target.formatted(.number))oz")
                         .bold()

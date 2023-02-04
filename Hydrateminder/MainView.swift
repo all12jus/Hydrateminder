@@ -57,6 +57,32 @@ struct LogConsumed: View {
     @State var AmountToAdd: Double = 0
     var ConsumptionEntryForToday: Consumption?
     
+//    var Consumed: Double {
+//        if let today = ConsumptionEntryForToday {
+//            return today.consumed
+//        }
+//        else { // TODO pull this from userdefaults.
+//            return 0
+//        }
+//    }
+//    var Target: Double {
+//        if let today = ConsumptionEntryForToday {
+//            return today.goal
+//        }
+//        else { // TODO pull this from userdefaults.
+//            return 64
+//        }
+//    }
+//
+//    var Remaining: Double {
+//        if let today = ConsumptionEntryForToday {
+//            return today.goal - today.consumed
+//        }
+//        else { // TODO pull this from userdefaults.
+//            return 64
+//        }
+//    }
+    
     var body: some View {
         NavigationView {
             VStack {

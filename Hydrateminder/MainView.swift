@@ -7,41 +7,126 @@
 
 import SwiftUI
 
+struct ProgressCircle: View {
+    
+    var Percentage: Double
+    
+    var body: some View {
+        GeometryReader { geometry in
+            Path { path in
+                let width: CGFloat = min(geometry.size.width, geometry.size.height)
+                let height = width
+                
+                let center = CGPoint(x: width * 0.5, y: height * 0.5)
+                
+                path.move(to: center)
+                
+                path.addArc(
+                    center: center,
+                    radius: width * 0.5,
+                    startAngle: Angle(degrees: -90.0) + Angle(degrees: 0),
+                    endAngle: Angle(degrees: -90.0) + Angle(degrees: Percentage / 100.0 * 360),
+                    clockwise: false)
+                
+            }
+            .fill(.teal)
+            
+            Circle()
+                .fill(.background)
+                .padding(48)
+                .frame(width: min(geometry.size.width, geometry.size.height), height: min(geometry.size.width, geometry.size.height))
+            
+            Image(systemName: "drop")
+                .font(.system(size: 72))
+                .foregroundColor(.teal)
+//                .resizable()
+                .padding(96)
+                .frame(width: min(geometry.size.width, geometry.size.height), height: min(geometry.size.width, geometry.size.height))
+                
+        }
+        .aspectRatio(1, contentMode: .fit)
+        .padding(48)
+    }
+}
+
+struct LogConsumed: View {
+    @Environment(\.dismiss) var dismiss
+    
+    @State var AmountToAdd: Float = 0
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Slider(value: $AmountToAdd, in: 0...8, step: 1.0) {
+                    Text("Amount")
+                } minimumValueLabel: {
+                    Text("0oz")
+                } maximumValueLabel: {
+                    Text("8oz")
+                }
+                .padding()
+
+            }
+            .navigationTitle("Log Consumption")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+        
+        
+    }
+}
+
 struct MainView: View {
     
-    var Percentage: Int = 95
+    @State var ShowAddConsumed: Bool = false
+    
+    @State var Consumed: Float = 4
+    var Target: Float = 64.0
+    var Percentage: Double {
+        Double(Consumed / Target) * 100
+    }
     
     var body: some View {
         
         NavigationView {
-//            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            
-            GeometryReader { geometry in
-                Path { path in
-                    let width: CGFloat = min(geometry.size.width, geometry.size.height)
-                    let height = width
+            VStack {
+                Spacer()
+                VStack {
+                    ProgressCircle(Percentage: Percentage)
                     
-                    let center = CGPoint(x: width * 0.5, y: height * 0.5)
-                    
-                    path.move(to: center)
-                    
-                    path.addArc(
-                        center: center,
-                        radius: width * 0.5,
-                        startAngle: Angle(degrees: -90.0) + Angle(degrees: 0),
-                        endAngle: Angle(degrees: -90.0) + Angle(degrees: Double(Percentage) / 100.0 * 360),
-                        clockwise: false)
-                    
+                    Text("\(Consumed.formatted(.number))oz / \(Target.formatted(.number))oz")
+                        .bold()
                 }
-                .fill(.teal)
-            }
-            .aspectRatio(1, contentMode: .fit)
-            .padding(48)
-            .padding(.bottom, 44)
-            
+                .padding(.bottom, 44)
+                Spacer()
+                
+                Button {
+                    ShowAddConsumed = true
+//                    Consumed += 10
+                } label: {
+                    HStack {
+                        Text("Log ")
+                        Image(systemName: "drop")
+                        Text(" Consumed")
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .frame(maxWidth: .infinity)
+                .padding()
+                
 
+                
+            }
+//            .padding(.bottom, 44)
+            
+            
             .navigationTitle("Hydrate Reminder")
             .navigationBarTitleDisplayMode(.inline)
+        }
+        
+        .sheet(isPresented: $ShowAddConsumed) {
+            LogConsumed()
+                .presentationDetents([.medium])
         }
         
         
@@ -50,6 +135,8 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        MainView().preferredColorScheme(.dark)
+        
+        MainView().preferredColorScheme(.light)
     }
 }

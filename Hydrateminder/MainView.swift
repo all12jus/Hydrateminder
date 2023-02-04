@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import StoreKit
 
 struct ProgressCircle: View {
     
@@ -229,6 +230,30 @@ struct SettingsView: View {
         
         List {
             Text("Settings View Coming soon.")
+            
+            
+            
+            Section {
+                Button {
+                    StoreViewModel.shared.fetchPurchases()
+                } label: {
+                    Text("Restore Purchases")
+                }
+                
+                
+                Button {
+                    StoreViewModel.shared.purchased.removeAll()
+                } label: {
+                    Text("Clear Purchases")
+                }
+                
+                Button {
+                    let paymentQueue = SKPaymentQueue.default()
+                    paymentQueue.presentCodeRedemptionSheet()
+                } label: {
+                    Text("Redeem Offer Code")
+                }
+            }
         }
         
         
@@ -395,4 +420,82 @@ struct MainView_Previews: PreviewProvider {
         
 //        HistoryLogView().preferredColorScheme(.dark)
     }
+}
+
+class StoreViewModel : ObservableObject {
+    static let shared = StoreViewModel()
+    
+    let productIds: [String] = [
+        "tech.justins.Hydrateminder.ProWidget",
+        "tech.justins.Hydrateminder.UnlimitedDailyReminder",
+//        "tech.justins.DogCamera.UnlockCustomSoundClip"
+//        "tech.justins.DogCamera.Squeeky2"
+    ]
+    
+    @Published var products: Set<Product> = Set()
+    @Published var purchased: Set<Product> = Set()
+    
+    private init() {
+        fetchPurchases()
+    }
+    
+    private func fetchProducts() async throws -> [Product] {
+        do {
+            return try await Product.products(for: productIds)
+        } catch {
+            print(error)
+            return []
+        }
+    }
+    
+    func fetchPurchases() {
+        Task.init {
+    
+            do {
+                if self.products.count == 0 {
+                    let products = try await fetchProducts()
+                    DispatchQueue.main.async {
+                        print("products: \(products)")
+                        self.products = Set( products )
+                    }
+                }
+                
+            } catch {
+                print(error)
+            }
+            
+            for await result in Transaction.currentEntitlements {
+                
+                switch result {
+                
+                case .unverified(_, _):
+                    print("unverified")
+                    break
+                case .verified(let receipt):
+//                    print(receipt.expirationDate)
+                    let product = products.first { p in
+                        p.id == receipt.productID
+                    }
+                    
+                    await receipt.finish()
+                    
+                    
+                    guard let product = product else { return  }
+                    print("ProductID: \(product.id)")
+                    DispatchQueue.main.async {
+                        self.purchased.insert(product) //.append(product)
+                    }
+                    
+                    print("verified")
+                    print(self.purchased)
+                    break
+                }
+                
+            }
+                        
+        }
+    }
+    
+    
+
 }

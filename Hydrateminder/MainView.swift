@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ProgressCircle: View {
     
@@ -51,8 +52,10 @@ struct ProgressCircle: View {
 
 struct LogConsumed: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.managedObjectContext) private var viewContext
     
-    @State var AmountToAdd: Float = 0
+    @State var AmountToAdd: Double = 0
+    var ConsumptionEntryForToday: Consumption?
     
     var body: some View {
         NavigationView {
@@ -72,6 +75,28 @@ struct LogConsumed: View {
 
                 Button {
 //                    ShowAddConsumed = true
+                    
+                    if let today = ConsumptionEntryForToday {
+                        today.consumed = today.consumed + AmountToAdd
+                    }
+                    else {
+                        let todays = Consumption(context: viewContext)
+                        todays.consumed = AmountToAdd
+                        todays.goal = 64
+                        todays.date = .now.startOfDay
+                    }
+                    
+                    do {
+                        try viewContext.save()
+                    } catch {
+                        // Replace this implementation with code to handle the error appropriately.
+                        // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                        let nsError = error as NSError
+                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                    }
+                    
+                    dismiss()
+             
                 } label: {
                     HStack {
                         Text("Log \(AmountToAdd.formatted(.number)) \(AmountToAdd == 1 ? "ounce" : "ounces")")
@@ -101,12 +126,117 @@ struct LogConsumed: View {
     }
 }
 
+struct HistoryLogView: View {
+    
+    
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Consumption.date, ascending: true)],
+        animation: .default)
+    private var items: FetchedResults<Consumption>
+    
+    
+    var body: some View {
+        
+        List {
+            
+            ForEach(items) { item in
+                 
+                // if is today, don't show
+                
+                
+                Text("\(item.date?.formatted(date: .abbreviated, time: .omitted) ?? "Unknown Date") \(item.consumed.formatted(.number)) ounces / \(item.goal.formatted(.number)) ounces")
+            }
+            
+            
+        }
+    }
+}
+
+struct SettingsView: View {
+    var body: some View {
+        
+        List {
+            Text("Settings View Coming soon.")
+        }
+        
+        
+    }
+}
+
+extension Date {
+    var startOfDay: Date {
+        return Calendar.current.startOfDay(for: self)
+    }
+    
+    var endOfDay: Date {
+        var components = DateComponents()
+        components.day = 1
+        components.second = -1
+        return Calendar.current.date(byAdding: components, to: startOfDay)!
+    }
+    
+    var startOfWeek: Date {
+        Calendar.current.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: self).date!
+    }
+    
+    var endOfWeek: Date {
+        var components = DateComponents()
+        components.weekOfYear = 1
+        components.second = -1
+        return Calendar.current.date(byAdding: components, to: startOfWeek)!
+    }
+    
+    var startOfMonth: Date {
+        let components = Calendar.current.dateComponents([.year, .month], from: startOfDay)
+        return Calendar.current.date(from: components)!
+    }
+    
+    var endOfMonth: Date {
+        var components = DateComponents()
+        components.month = 1
+        components.second = -1
+        return Calendar.current.date(byAdding: components, to: startOfMonth)!
+    }
+}
+
 struct MainView: View {
+    @Environment(\.managedObjectContext) private var viewContext
     
     @State var ShowAddConsumed: Bool = false
     
-    @State var Consumed: Float = 4
-    var Target: Float = 64.0
+    @FetchRequest(
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Consumption.date, ascending: true)
+        ],
+        predicate: NSPredicate(format: "(date >= %@) AND (date <= %@)", argumentArray: [Date.now.startOfDay, Date.now.endOfDay]),
+        animation: .default)
+    private var items: FetchedResults<Consumption>
+    
+    var ConsumptionEntryForToday: Consumption? {
+        return items.first
+    }
+    
+    var Consumed: Double {
+        if let today = ConsumptionEntryForToday {
+            return today.consumed
+        }
+        else { // TODO pull this from userdefaults.
+            return 0
+        }
+    }
+    var Target: Double {
+        if let today = ConsumptionEntryForToday {
+            return today.goal
+        }
+        else { // TODO pull this from userdefaults.
+            return 64
+        }
+    }
+    
+    
     var Percentage: Double {
         Double(Consumed / Target) * 100
     }
@@ -142,18 +272,42 @@ struct MainView: View {
 
                 
             }
+            
+            
+            
 //            .padding(.bottom, 44)
             
             
             .navigationTitle("Hydrate Reminder")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    NavigationLink {
+                        SettingsView()
+                            .navigationTitle("Settings")
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink {
+                        HistoryLogView()
+                            .navigationTitle("History")
+                    } label: {
+                        Image(systemName: "clock")
+                    }
+                }
+            }
+            
         }
         
         .sheet(isPresented: $ShowAddConsumed) {
-            LogConsumed()
+            LogConsumed(ConsumptionEntryForToday: ConsumptionEntryForToday)
                 .presentationDetents([.medium])
                 .interactiveDismissDisabled(true)
         }
+        
         
         
     }
@@ -162,7 +316,10 @@ struct MainView: View {
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView().preferredColorScheme(.dark)
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         
-        MainView().preferredColorScheme(.light)
+//        MainView().preferredColorScheme(.light)
+        
+//        HistoryLogView().preferredColorScheme(.dark)
     }
 }

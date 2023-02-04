@@ -102,6 +102,8 @@ struct LogConsumed: View {
                 Button {
 //                    ShowAddConsumed = true
                     
+                    
+                    
                     if let today = ConsumptionEntryForToday {
                         today.consumed = today.consumed + AmountToAdd
                     }
@@ -160,7 +162,7 @@ struct HistoryLogView: View {
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Consumption.date, ascending: true)],
-        animation: .default)
+        animation: .easeInOut)
     private var items: FetchedResults<Consumption>
     
     
@@ -168,23 +170,32 @@ struct HistoryLogView: View {
         
         List {
             
-            ForEach(items) { item in
-                 
-                // if is today, don't show
-                if let date = item.date {
-                    if date.isToday {
-//                        Text("Today \(item.consumed.formatted(.number)) ounces / \(item.goal.formatted(.number)) ounces")
-                        ItemEntryToday(item)
-                    }
-                    else {
-//                        Text("\(item.date?.formatted(date: .abbreviated, time: .omitted) ?? "Unknown Date") \(item.consumed.formatted(.number)) ounces / \(item.goal.formatted(.number)) ounces")
-                        
-                        ItemEntry(item)
+            Section {
+                ForEach(items) { item in
+                    // if is today, don't show
+                    if let date = item.date {
+                        if date.isToday {
+                            ItemEntryToday(item)
+                        }
+                        else {
+//                            ItemEntry(item)
+                        }
                     }
                 }
-                
-                
-                
+            }
+            
+            Section("History") {
+                ForEach(items) { item in
+                    // if is today, don't show
+                    if let date = item.date {
+                        if date.isToday {
+//                            ItemEntryToday(item)
+                        }
+                        else {
+                            ItemEntry(item)
+                        }
+                    }
+                }
             }
             
             
@@ -274,7 +285,7 @@ struct MainView: View {
             NSSortDescriptor(keyPath: \Consumption.date, ascending: true)
         ],
         predicate: NSPredicate(format: "(date >= %@) AND (date <= %@)", argumentArray: [Date.now.startOfDay, Date.now.endOfDay]),
-        animation: .default)
+        animation: .easeInOut)
     private var items: FetchedResults<Consumption>
     
     var ConsumptionEntryForToday: Consumption? {

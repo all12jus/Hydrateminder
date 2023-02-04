@@ -162,7 +162,7 @@ struct HistoryLogView: View {
     
     
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Consumption.date, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Consumption.date, ascending: false)],
         animation: .easeInOut)
     private var items: FetchedResults<Consumption>
     
@@ -226,6 +226,9 @@ struct HistoryLogView: View {
 }
 
 struct SettingsView: View {
+    
+    @Environment(\.managedObjectContext) private var viewContext
+    
     var body: some View {
         
         List {
@@ -254,6 +257,56 @@ struct SettingsView: View {
                     Text("Redeem Offer Code")
                 }
             }
+            
+            #if DEBUG
+            
+            Section("Debug") {
+                Button {
+                    
+                    // clear the collection
+                    
+//                    let count = 5
+                    var date: Date = .yesterday.startOfDay
+                    Array(0...20).forEach { index in
+                        print("Day \(index)")
+                        let day = Consumption(context: viewContext)
+                        day.date = date
+                        day.goal = 64
+                        day.consumed = Double(Int.random(in: 64...64))
+                        date = date.dayBefore.startOfDay
+                        
+                        do {
+                            try viewContext.save()
+                        } catch {
+                            // Replace this implementation with code to handle the error appropriately.
+                            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                            let nsError = error as NSError
+                            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                        }
+                    }
+                    
+                    
+//                    let yesterday = Consumption(context: viewContext)
+//                    yesterday.date = .yesterday.startOfDay
+//                    yesterday.goal = 64
+//                    yesterday.consumed = 16
+                    
+                    do {
+                        try viewContext.save()
+                    } catch {
+                        // Replace this implementation with code to handle the error appropriately.
+                        // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                        let nsError = error as NSError
+                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                    }
+                    
+                    
+                } label: {
+                    Text("Create previous day entry")
+                }
+            }
+            
+            #endif
         }
         
         
@@ -297,6 +350,24 @@ extension Date {
         components.month = 1
         components.second = -1
         return Calendar.current.date(byAdding: components, to: startOfMonth)!
+    }
+    
+    static var yesterday: Date { return Date().dayBefore }
+    static var tomorrow:  Date { return Date().dayAfter }
+    var dayBefore: Date {
+        return Calendar.current.date(byAdding: .day, value: -1, to: noon)!
+    }
+    var dayAfter: Date {
+        return Calendar.current.date(byAdding: .day, value: 1, to: noon)!
+    }
+    var noon: Date {
+        return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
+    }
+    var month: Int {
+        return Calendar.current.component(.month,  from: self)
+    }
+    var isLastDayOfMonth: Bool {
+        return dayAfter.month != month
     }
 }
 

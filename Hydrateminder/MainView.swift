@@ -9,6 +9,9 @@ import SwiftUI
 import CoreData
 import StoreKit
 
+// use this to find the directory for the Database.
+// https://stackoverflow.com/questions/2268102/how-to-view-data-stored-in-core-data
+
 struct ProgressCircle: View {
     
     var Percentage: Double
@@ -385,7 +388,9 @@ struct MainView: View {
     private var items: FetchedResults<Consumption>
     
     var ConsumptionEntryForToday: Consumption? {
-        return items.first
+        return items.first(where: { item in
+            item.date?.isToday ?? false
+        })
     }
     
     var Consumed: Double {

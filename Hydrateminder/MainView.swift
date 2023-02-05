@@ -228,6 +228,178 @@ struct HistoryLogView: View {
     
 }
 
+struct ReminderListView: View {
+    
+    @StateObject var viewModel: ReminderViewModel = .init()
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    // ReminderViewModel
+    
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Reminder.minutes, ascending: true)],
+        animation: .easeInOut)
+    private var items: FetchedResults<Reminder>
+    
+    @State var errorSaving: Bool = false
+    @State var showAddTime: Bool = false
+    @State private var addNewTimeDate = Date().beginningOfHour
+    
+    var body: some View {
+        
+        List {
+            
+
+            ForEach(items) { item in
+                // if is today, don't show
+                ItemEntry(item)
+                    
+            }
+            .onDelete(perform: onDelete(_:))
+            
+            
+        }
+        .navigationTitle("Reminders")
+        .toolbar(content: {
+            ToolbarItem {
+                Button("Add") {
+                    showAddTime = true
+                }
+            }
+        })
+        
+        .alert("Error Saving", isPresented: $errorSaving) {
+            
+        }
+        .popover(isPresented: $showAddTime) {
+            
+            AddNewTimePopover()
+                .presentationDetents([.medium])
+//                .interactiveDismissDisabled(true)
+            
+        }
+    }
+    
+    func onDelete(_ offsets: IndexSet) {
+        for index in offsets {
+            let itemsToRemove = items[index]
+            viewContext.delete(itemsToRemove)
+        }
+    }
+    
+    func minsToTime(_ input: Int16) -> String {
+        let hours = (input / 60)
+        let mins = input - (hours * 60)
+        let meridiem = hours >= 12 ? "PM" : "AM"
+        let minsFormatted = String(format: "%02d", mins)
+        
+        return "\(hours):\(minsFormatted) \(meridiem)"
+    }
+    
+    func timeToMins(_ date: Date) -> Int16 {
+        let calendar = Calendar.current
+
+        let hour = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date)
+        return Int16((hour * 60) + minutes)
+    }
+    
+    func timeToComponents(_ date: Date) -> (Int, Int) {
+        let calendar = Calendar.current
+
+        let hour = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date)
+        
+        return (hour, minutes)
+    }
+    
+    
+    func addNotification(_ date: Date) {
+        let content = UNMutableNotificationContent()
+        content.title = "Log Your Water Intake"
+        content.subtitle = "Have you logged your water intake?"
+        content.sound = UNNotificationSound.default
+        
+        let (hour, minutes) = timeToComponents(date)
+
+        let components = DateComponents(calendar: .current, timeZone: .current, hour: hour, minute: minutes)
+
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: true))
+        
+        print(request.trigger.debugDescription)
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    @ViewBuilder
+    func AddNewTimePopover() -> some View {
+        
+        NavigationView {
+            VStack {
+                
+                Spacer()
+                DatePicker("", selection: $addNewTimeDate, displayedComponents: .hourAndMinute)
+                            .labelsHidden()
+                            .frame(maxWidth: .infinity)
+//                            .pickerStyle(.segmented)
+                            .datePickerStyle(.wheel)
+                
+                Spacer()
+                
+                Button {
+                    // do this soon.
+                    
+                    viewModel.authorizeNotifications()
+                                        
+                    let newReminder = Reminder(context: viewContext)
+                    newReminder.minutes = timeToMins(addNewTimeDate)
+                    newReminder.active = true
+                    do {
+                        try newReminder.managedObjectContext?.save()
+                        
+                        addNotification(addNewTimeDate)
+                        
+                        showAddTime = false
+                    }
+                    catch {
+                        errorSaving = true
+                    }
+                } label: {
+                    Text("Add Reminder")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .padding()
+                
+                
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Add Reminder")
+        }
+    }
+
+    @ViewBuilder
+    func ItemEntry(_ item: Reminder) -> some View {
+        HStack {
+            Text("\(minsToTime(item.minutes))")
+            Spacer()
+            Toggle("", isOn: Binding(get: {
+                return item.active
+            }, set: { value, _ in
+                //
+                item.active = !item.active
+                do {
+                    try item.managedObjectContext?.save()
+                }
+                catch {
+                    errorSaving = true
+                }
+            }))
+        }
+    }
+    
+    
+}
+
 struct SettingsView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
@@ -237,6 +409,13 @@ struct SettingsView: View {
         List {
 //            Text("Settings View Coming soon.")
             
+            Section("") {
+                NavigationLink {
+                    ReminderListView()
+                } label: {
+                    Text("Reminders")
+                }
+            }
             
             
             Section {
@@ -261,9 +440,22 @@ struct SettingsView: View {
                 }
             }
             
+            
+            //
+            
+
+            
             #if DEBUG
             
             Section("Debug") {
+                
+                Button {
+                    UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                } label: {
+                    Text("Clear Notifications")
+                }
+                
+                
                 Button {
                     
                     // clear the collection
@@ -371,6 +563,9 @@ extension Date {
     }
     var isLastDayOfMonth: Bool {
         return dayAfter.month != month
+    }
+    var beginningOfHour: Date {
+        return Calendar.current.date(bySetting: .minute, value: 0, of: self)!
     }
 }
 
@@ -577,4 +772,24 @@ class StoreViewModel : ObservableObject {
     
     
 
+}
+
+class ReminderViewModel : NSObject, ObservableObject, UNUserNotificationCenterDelegate {
+    
+    override init() {
+        super.init()
+//        authorizeNotifications()
+    }
+    
+    func authorizeNotifications() {
+        UNUserNotificationCenter.current().requestAuthorization (options: [.sound, .alert, .badge]) { _, _ in
+            
+        }
+        
+        UNUserNotificationCenter.current().delegate = self
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.sound, .banner, .badge])
+    }
 }

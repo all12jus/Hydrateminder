@@ -7,6 +7,6 @@
     </entity>
     <entity name="Reminder" representedClassName="Reminder" syncable="YES" codeGenerationType="class">
         <attribute name="active" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="minutes" attributeType="Integer 16" minValueString="0" maxValueString="1440" defaultValueString="720" usesScalarValueType="YES"/>
     </entity>
 </model>

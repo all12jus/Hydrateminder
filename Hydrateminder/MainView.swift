@@ -285,6 +285,8 @@ struct ReminderListView: View {
             let itemsToRemove = items[index]
             viewContext.delete(itemsToRemove)
         }
+        
+        viewModel.resetNotifications()
     }
     
     func minsToTime(_ input: Int16) -> String {
@@ -304,31 +306,10 @@ struct ReminderListView: View {
         return Int16((hour * 60) + minutes)
     }
     
-    func timeToComponents(_ date: Date) -> (Int, Int) {
-        let calendar = Calendar.current
 
-        let hour = calendar.component(.hour, from: date)
-        let minutes = calendar.component(.minute, from: date)
-        
-        return (hour, minutes)
-    }
     
     
-    func addNotification(_ date: Date) {
-        let content = UNMutableNotificationContent()
-        content.title = "Log Your Water Intake"
-        content.subtitle = "Have you logged your water intake?"
-        content.sound = UNNotificationSound.default
-        
-        let (hour, minutes) = timeToComponents(date)
 
-        let components = DateComponents(calendar: .current, timeZone: .current, hour: hour, minute: minutes)
-
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: true))
-        
-        print(request.trigger.debugDescription)
-        UNUserNotificationCenter.current().add(request)
-    }
     
     @ViewBuilder
     func AddNewTimePopover() -> some View {
@@ -356,7 +337,8 @@ struct ReminderListView: View {
                     do {
                         try newReminder.managedObjectContext?.save()
                         
-                        addNotification(addNewTimeDate)
+//                        viewModel.addNotification(addNewTimeDate)
+                        viewModel.resetNotifications() // this will also create the new one.
                         
                         showAddTime = false
                     }
@@ -389,6 +371,7 @@ struct ReminderListView: View {
                 item.active = !item.active
                 do {
                     try item.managedObjectContext?.save()
+                    viewModel.resetNotifications()
                 }
                 catch {
                     errorSaving = true
@@ -403,6 +386,8 @@ struct ReminderListView: View {
 struct SettingsView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
+    
+    @StateObject var viewModel: ReminderViewModel = .init()
     
     var body: some View {
         
@@ -454,6 +439,13 @@ struct SettingsView: View {
                 } label: {
                     Text("Clear Notifications")
                 }
+                
+                Button {
+                    viewModel.resetNotifications()
+                } label: {
+                    Text("Reset Notifications")
+                }
+
                 
                 
                 Button {
@@ -791,5 +783,75 @@ class ReminderViewModel : NSObject, ObservableObject, UNUserNotificationCenterDe
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.sound, .banner, .badge])
+    }
+    
+    func addNotification(_ date: Date) {
+        let content = UNMutableNotificationContent()
+        content.title = "Log Your Water Intake"
+        content.subtitle = "Have you logged your water intake?"
+        content.sound = UNNotificationSound.default
+        
+        let (hour, minutes) = timeToComponents(date)
+
+        let components = DateComponents(calendar: .current, timeZone: .current, hour: hour, minute: minutes)
+
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: true))
+        
+        print(request.trigger.debugDescription)
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func resetNotifications() {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Log Your Water Intake"
+        content.subtitle = "Have you logged your water intake?"
+        content.sound = UNNotificationSound.default
+        
+        //  sortDescriptors: [NSSortDescriptor(keyPath: \Reminder.minutes, ascending: true)],
+        
+        let fetchRequest =
+            NSFetchRequest<NSManagedObject>(entityName: "Reminder")
+          
+        do {
+            let reminders: [Reminder] = try PersistenceController.shared.container.viewContext.fetch(fetchRequest) as! [Reminder]
+          
+          reminders.filter { reminder in
+              reminder.active
+          }.forEach { reminder in
+              let (hours, minutes) = minsToComponents(reminder.minutes)
+              let components = DateComponents(calendar: .current, timeZone: .current, hour: hours, minute: minutes)
+
+              let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: true))
+              
+              print(request.trigger.debugDescription)
+              UNUserNotificationCenter.current().add(request)
+              
+          }
+          
+        } catch let error as NSError {
+        print("Could not fetch. \(error), \(error.userInfo)")
+        }
+
+        
+        
+        
+    }
+    
+    func timeToComponents(_ date: Date) -> (Int, Int) {
+        let calendar = Calendar.current
+
+        let hour = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date)
+        
+        return (hour, minutes)
+    }
+    
+    func minsToComponents(_ input: Int16) -> (Int, Int) {
+        let hours = (input / 60)
+        let minutes = input - (hours * 60)
+        
+        return (Int(hours), Int(minutes))
     }
 }

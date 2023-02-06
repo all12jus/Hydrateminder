@@ -11,6 +11,8 @@ import SwiftUI
 struct HydrateminderApp: App {
     let persistenceController = PersistenceController.shared
 
+    // PersistenceController.shared.container.viewContext
+    
     var body: some Scene {
         WindowGroup {
             MainView()

@@ -233,6 +233,93 @@ struct ReminderListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     // ReminderViewModel
+    @ObservedObject var storeViewModel = StoreViewModel.shared
+    var productID: String = "tech.justins.Hydrateminder.UnlimitedDailyReminder"
+    var priceText: String {
+        get {
+            if isPurchased {
+                return "OWNED"
+            }
+
+            if ((product?.displayPrice) != nil) {
+                return product!.displayPrice
+            }
+
+            return "$"
+        }
+    }
+    var isPurchased: Bool {
+        let product = StoreViewModel.shared.purchased.first(where: { p in
+            p.id == self.productID
+        })
+
+        return  product != nil
+    }
+
+    var product: Product? {
+        let product = StoreViewModel.shared.products.first(where: { p in
+            p.id == self.productID
+        })
+
+        return  product
+    }
+    
+    func TriggerPurchase() async {
+        do {
+            guard let product = product else { return }
+            let result = try await product.purchase()
+            switch result {
+        
+            case .success(let success_result):
+                print("purchased")
+            
+                switch success_result {
+            
+                case .unverified(_, _):
+                    print("unverified")
+                case .verified(let receipt):
+                    print("verified")
+                    print(receipt)
+                
+                    let product = storeViewModel.products.first { p in
+                        p.id == receipt.productID
+                    }
+                
+                    await receipt.finish()
+                    guard let product = product else { return print("No Product") }
+                    DispatchQueue.main.async {
+                        storeViewModel.purchased.insert(product)
+                    }
+                
+                }
+
+            case .userCancelled:
+                print("user cancelled")
+            case .pending:
+                print("pending")
+            @unknown default:
+                print("unknown")
+            }
+        } catch {
+            print("Purchase Failed \(error)")
+        }
+        
+        
+    }
+    
+    
+    @ViewBuilder
+    func BuyButton() -> some View {
+        Button {
+            Task {
+                await TriggerPurchase()
+            }
+        } label: {
+            Text(priceText)
+        }
+        .buttonStyle(.bordered)
+//        .disabled(true)
+    }
     
     
     @FetchRequest(
@@ -242,7 +329,7 @@ struct ReminderListView: View {
     
     @State var errorSaving: Bool = false
     @State var showAddTime: Bool = false
-    @State private var addNewTimeDate = Date().beginningOfHour
+    @State private var addNewTimeDate = Date() //.beginningOfHour
     
     var body: some View {
         
@@ -256,6 +343,17 @@ struct ReminderListView: View {
             }
             .onDelete(perform: onDelete(_:))
             
+            if (!isPurchased){
+                Section {
+                    HStack {
+                        Text("Unlock Unlimited Reminders")
+                        Spacer()
+                        BuyButton()
+                    }
+                }
+                
+                
+            }
             
         }
         .navigationTitle("Reminders")
@@ -264,6 +362,7 @@ struct ReminderListView: View {
                 Button("Add") {
                     showAddTime = true
                 }
+                .disabled(items.count >= 1 && !isPurchased)
             }
         })
         

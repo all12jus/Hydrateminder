@@ -1,0 +1,21 @@
+{
+  "identifier" : "74E873A3",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1671877006",
+    "_developerTeamID" : "562HEMPPEX",
+    "_lastSynchronizedDate" : 698096445.59684801
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

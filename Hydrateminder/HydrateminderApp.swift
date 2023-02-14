@@ -17,6 +17,14 @@ struct HydrateminderApp: App {
         WindowGroup {
             MainView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .onAppear {
+                    UIApplication.shared.registerForRemoteNotifications()
+                    StoreViewModel.shared.fetchPurchases()
+
+                    Task.init {
+                        StoreViewModel.shared.fetchPurchases()
+                    }
+                }
         }
     }
 }

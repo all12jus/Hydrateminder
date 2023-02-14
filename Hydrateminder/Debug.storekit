@@ -1,0 +1,33 @@
+{
+  "identifier" : "37F7B85D",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "D7197873",
+      "localizations" : [
+        {
+          "description" : "",
+          "displayName" : "",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "tech.justins.Hydrateminder.UnlimitedDailyReminder",
+      "referenceName" : "Unlimited Daily Reminder",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

@@ -26,6 +26,8 @@
 		D02DAE98298DE1DE00AF3512 /* Hydrateminder.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Hydrateminder.xcdatamodel; sourceTree = "<group>"; };
 		D02DAE9A298DE1DE00AF3512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D02DAEA0298DE23900AF3512 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		D0F66816299C1ABB00568D80 /* Debug.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Debug.storekit; sourceTree = "<group>"; };
+		D0F66817299C1AD500568D80 /* Production.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Production.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 		D02DAE8B298DE1DC00AF3512 /* Hydrateminder */ = {
 			isa = PBXGroup;
 			children = (
+				D0F66817299C1AD500568D80 /* Production.storekit */,
 				D02DAE8C298DE1DC00AF3512 /* HydrateminderApp.swift */,
 				D02DAE8E298DE1DC00AF3512 /* ContentView.swift */,
 				D02DAE90298DE1DE00AF3512 /* Assets.xcassets */,
@@ -66,6 +69,7 @@
 				D02DAE97298DE1DE00AF3512 /* Hydrateminder.xcdatamodeld */,
 				D02DAE92298DE1DE00AF3512 /* Preview Content */,
 				D02DAEA0298DE23900AF3512 /* MainView.swift */,
+				D0F66816299C1ABB00568D80 /* Debug.storekit */,
 			);
 			path = Hydrateminder;
 			sourceTree = "<group>";

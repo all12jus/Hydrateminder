@@ -89,20 +89,17 @@ struct LogConsumed: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                Spacer()
-                
-                Slider(value: $AmountToAdd, in: 0...8, step: 1.0) {
+            VStack (spacing: 16) {
+ 
+                Slider(value: $AmountToAdd, in: 0...16, step: 1.0) {
                     Text("Amount")
                 } minimumValueLabel: {
                     Text("0oz")
                 } maximumValueLabel: {
-                    Text("8oz")
+                    Text("16oz")
                 }
                 .padding()
                 
-                Spacer()
-
                 Button {
 //                    ShowAddConsumed = true
                     
@@ -141,6 +138,7 @@ struct LogConsumed: View {
                 .padding()
                 
             }
+            .padding(.vertical, 32)
             .navigationTitle("Log Consumption")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -153,6 +151,7 @@ struct LogConsumed: View {
                 }
             }
         }
+        
         
         
     }
@@ -668,7 +667,7 @@ struct MainView: View {
         
         .sheet(isPresented: $ShowAddConsumed) {
             LogConsumed(ConsumptionEntryForToday: ConsumptionEntryForToday)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(200)]) // .medium
                 .interactiveDismissDisabled(true)
         }
         

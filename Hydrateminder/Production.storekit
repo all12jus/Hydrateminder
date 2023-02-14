@@ -4,15 +4,79 @@
 
   ],
   "products" : [
-
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "6445720483",
+      "localizations" : [
+        {
+          "description" : "Unlimited Daily Reminder",
+          "displayName" : "Unlimited Daily Reminder",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "tech.justins.Hydrateminder.UnlimitedDailyReminder",
+      "referenceName" : "Unlimited Daily Reminder",
+      "type" : "NonConsumable"
+    }
   ],
   "settings" : {
     "_applicationInternalID" : "1671877006",
     "_developerTeamID" : "562HEMPPEX",
-    "_lastSynchronizedDate" : 698096445.59684801
+    "_lastSynchronizedDate" : 698098371.41937006
   },
   "subscriptionGroups" : [
+    {
+      "id" : "21221106",
+      "localizations" : [
 
+      ],
+      "name" : "Daily Reminder Club+",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6445720324",
+          "introductoryOffer" : null,
+          "localizations" : [
+
+          ],
+          "productID" : "tech.justins.Hydrateminder.UnlimitedDailyReminder.Monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Unlimited Daily Reminder [Monthly]",
+          "subscriptionGroupID" : "21221106",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "9.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6445720600",
+          "introductoryOffer" : null,
+          "localizations" : [
+
+          ],
+          "productID" : "tech.justins.Hydrateminder.UnlimitedDailyReminder.Yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Unlimited Daily Reminder [Yearly]",
+          "subscriptionGroupID" : "21221106",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
   ],
   "version" : {
     "major" : 2,

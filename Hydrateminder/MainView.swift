@@ -227,6 +227,8 @@ struct HistoryLogView: View {
     
 }
 
+
+
 struct ReminderListView: View {
     
     @StateObject var viewModel: ReminderViewModel = .init()
@@ -234,7 +236,7 @@ struct ReminderListView: View {
     
     // ReminderViewModel
     @ObservedObject var storeViewModel = StoreViewModel.shared
-    var productID: String = "tech.justins.Hydrateminder.UnlimitedDailyReminder"
+    var productID: String = "tech.justins.Hydrateminder.UnlimitedDailyReminder.Monthly"
     var priceText: String {
         get {
             if isPurchased {
@@ -792,6 +794,8 @@ class StoreViewModel : ObservableObject {
     let productIds: [String] = [
         "tech.justins.Hydrateminder.ProWidget",
         "tech.justins.Hydrateminder.UnlimitedDailyReminder",
+        "tech.justins.Hydrateminder.UnlimitedDailyReminder.Monthly",
+        "tech.justins.Hydrateminder.UnlimitedDailyReminder.Yearly",
 //        "tech.justins.DogCamera.UnlockCustomSoundClip"
 //        "tech.justins.DogCamera.Squeeky2"
     ]

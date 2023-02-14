@@ -4,27 +4,71 @@
 
   ],
   "products" : [
-    {
-      "displayPrice" : "4.99",
-      "familyShareable" : false,
-      "internalID" : "D7197873",
-      "localizations" : [
-        {
-          "description" : "",
-          "displayName" : "",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "tech.justins.Hydrateminder.UnlimitedDailyReminder",
-      "referenceName" : "Unlimited Daily Reminder",
-      "type" : "NonConsumable"
-    }
+
   ],
   "settings" : {
 
   },
   "subscriptionGroups" : [
+    {
+      "id" : "D4EBBD80",
+      "localizations" : [
 
+      ],
+      "name" : "Daily Reminder Club+",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "940BEAE2",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "",
+              "displayName" : "",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "tech.justins.Hydrateminder.UnlimitedDailyReminder.Monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Unlimited Daily Reminder [Monthly]",
+          "subscriptionGroupID" : "D4EBBD80",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "9.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "FD009EF1",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "",
+              "displayName" : "",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "tech.justins.Hydrateminder.UnlimitedDailyReminder.Yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Unlimited Daily Reminder [Yearly]",
+          "subscriptionGroupID" : "D4EBBD80",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
   ],
   "version" : {
     "major" : 2,

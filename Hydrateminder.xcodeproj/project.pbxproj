@@ -60,7 +60,6 @@
 		D02DAE8B298DE1DC00AF3512 /* Hydrateminder */ = {
 			isa = PBXGroup;
 			children = (
-				D0F66817299C1AD500568D80 /* Production.storekit */,
 				D02DAE8C298DE1DC00AF3512 /* HydrateminderApp.swift */,
 				D02DAE8E298DE1DC00AF3512 /* ContentView.swift */,
 				D02DAE90298DE1DE00AF3512 /* Assets.xcassets */,
@@ -70,6 +69,7 @@
 				D02DAE92298DE1DE00AF3512 /* Preview Content */,
 				D02DAEA0298DE23900AF3512 /* MainView.swift */,
 				D0F66816299C1ABB00568D80 /* Debug.storekit */,
+				D0F66817299C1AD500568D80 /* Production.storekit */,
 			);
 			path = Hydrateminder;
 			sourceTree = "<group>";

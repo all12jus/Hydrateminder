@@ -208,6 +208,9 @@ struct DayView: View {
     @ViewBuilder
     func BG() -> some View {
         GeometryReader { geometry in
+            
+            
+            
             Path { path in
                 let width: CGFloat = min(geometry.size.width, geometry.size.height)
                 let height = width
@@ -226,11 +229,13 @@ struct DayView: View {
             }
             .fill(.teal)
             
-//            Circle()
-//                .fill(.background)
-//                .padding(24) // 48
-//                .frame(width: min(geometry.size.width, geometry.size.height), height: min(geometry.size.width, geometry.size.height))
-//
+            Circle()
+                .fill(.background)
+                
+                .frame(width: min(geometry.size.width, geometry.size.height) - 4, height: min(geometry.size.width, geometry.size.height) - 4)
+                .padding(.top, 2)
+                .padding(.leading, 2)
+
 
         }
         .aspectRatio(1, contentMode: .fit)
@@ -239,6 +244,7 @@ struct DayView: View {
     var body: some View {
         let te = Text(String(self.calendar.component(.day, from: day)))
             .foregroundColor(.teal)
+            .padding(4)
         let vw =
             Text("30")
             .lineSpacing(0)

@@ -35,7 +35,7 @@ struct PersistenceController {
             let dayDate = Calendar.current.date(byAdding: .day, value: day, to: startDate)
             newItem2.date = dayDate
             newItem2.goal = 64
-            newItem2.consumed = day > Date.now.day / 2 ? 64 : Double(Int.random(in: 0..<64))
+            newItem2.consumed = (day > Date.now.day / 3) ? 64.0 : Double(Int.random(in: 0..<64))
         }
         
 //        for _ in 0..<10 {

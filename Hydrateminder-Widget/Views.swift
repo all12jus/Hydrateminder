@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-struct DayView: View {
+struct DayView_: View {
     let calendar: Calendar
     let week: Date
     let day: Date
@@ -28,35 +28,11 @@ struct DayView: View {
     func getDateColor(day: Date) -> Color {
         // should be comparing against entry.date
         Color.blue
-//        if self.calendar.isDateInToday(day) {
-//            // today
-//            return Color.label
-//        }
-//        else if day < Date.init() {
-//            // before today
-//            return Color.systemBackground
-//        }
-//        else {
-//            // after today
-//            return Color.systemBackground
-//        }
     }
     
     func getDateFontColor(day: Date) -> Color {
         // should be comparing against entry.date
         Color.teal
-//        if self.calendar.isDateInToday(day) {
-//            // today
-//            return Color.systemBackground
-//        }
-//        else if day < Date.init() {
-//            // before today
-//            return Color.label
-//        }
-//        else {
-//            // after today
-//            return Color.label
-//        }
     }
     
     func getDateOpacity(day: Date) -> Double {
@@ -78,7 +54,6 @@ struct DayView: View {
     var ConsumptionEntryForToday: Consumption? {
         return consumption.first(where: { item in
             item.date?.startOfDay == day.startOfDay
-//            item.date?.isToday ?? false
         })
     }
     
@@ -144,9 +119,6 @@ struct DayView: View {
             .hidden()
             .padding(8)
             .overlay(BG())
-//            .background(getDateColor(day: day))
-//            .clipShape(BG())
-//            .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5,height: 5)))
             .padding(.vertical, 4)
             .overlay(te)
             .opacity(getDateOpacity(day: day))
@@ -164,7 +136,7 @@ struct DayView: View {
 }
 
 
-struct MonthView: View {
+struct MonthView_: View {
     let calendar: Calendar
     let month: Date
     
@@ -177,35 +149,11 @@ struct MonthView: View {
     func getDateColor(day: Date) -> Color {
         // should be comparing against entry.date
         Color.blue
-//        if self.calendar.isDateInToday(day) {
-//            // today
-//            return Color.label
-//        }
-//        else if day < Date.init() {
-//            // before today
-//            return Color.systemBackground
-//        }
-//        else {
-//            // after today
-//            return Color.systemBackground
-//        }
     }
     
     func getDateFontColor(day: Date) -> Color {
         // should be comparing against entry.date
         Color.teal
-//        if self.calendar.isDateInToday(day) {
-//            // today
-//            return Color.systemBackground
-//        }
-//        else if day < Date.init() {
-//            // before today
-//            return Color.label
-//        }
-//        else {
-//            // after today
-//            return Color.label
-//        }
     }
     
     func getDateOpacity(day: Date) -> Double {
@@ -223,33 +171,7 @@ struct MonthView: View {
             return 0.7
         }
     }
-    
-
-//    @ViewBuilder
-//    func DayView(_ week: Date, _ day: Date) -> some View {
-//        let te = Text(String(self.calendar.component(.day, from: day)))
-//        .foregroundColor(getDateFontColor(day: day))
-//        let vw =
-//            Text("30")
-//            .lineSpacing(0)
-//            .hidden()
-//            .padding(8)
-//            .background(getDateColor(day: day))
-//            .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5,height: 5)))
-//            .padding(.vertical, 4)
-//            .overlay(te)
-//            .opacity(getDateOpacity(day: day))
-//
-//
-//        if self.calendar.isDate(week, equalTo: day, toGranularity: .month) {
-//            vw
-//        }
-//        else {
-//            vw.hidden()
-//        }
-//    }
-
-    
+        
     var body: some View {
         // grab the month
         let monthInterval: DateInterval = calendar.dateInterval(of: .month, for: month)!
@@ -259,7 +181,6 @@ struct MonthView: View {
     
         // for each week, grab each day in interval
         let firstDayOfMonth = calendar.generateDates(inside: monthInterval, matching: DateComponents(day: 1, hour: 0, minute: 0, second: 0))[0]
-    
     
         let formatter = DateFormatter.monthAndYear
         let monthString = formatter.string(from: firstDayOfMonth)
@@ -277,8 +198,7 @@ struct MonthView: View {
             let days = calendar.generateDates(inside: weekInterval!, matching: DateComponents(hour:0, minute: 0, second: 0))
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 1), spacing: 0), count: 7), content: {
                 ForEach(days, id: \.self) { day in
-//                    DayView(week, day)
-                    DayView(calendar: calendar, week: week, day: day)
+                    DayView_(calendar: calendar, week: week, day: day)
                 }
             })
         }

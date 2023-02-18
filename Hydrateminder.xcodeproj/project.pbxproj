@@ -23,6 +23,11 @@
 		D0F3844A29A08B4700D5A91B /* Hydrateminder_Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = D0F3844629A08B4700D5A91B /* Hydrateminder_Widget.intentdefinition */; };
 		D0F3844B29A08B4700D5A91B /* Hydrateminder_Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = D0F3844629A08B4700D5A91B /* Hydrateminder_Widget.intentdefinition */; };
 		D0F3844E29A08B4700D5A91B /* Hydrateminder-WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D0F3843929A08B4600D5A91B /* Hydrateminder-WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D0F3845429A090B900D5A91B /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02DAE95298DE1DE00AF3512 /* Persistence.swift */; };
+		D0F3845529A090C600D5A91B /* Hydrateminder.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D02DAE97298DE1DE00AF3512 /* Hydrateminder.xcdatamodeld */; };
+		D0F3845729A090F100D5A91B /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3845629A090F100D5A91B /* Date+Ext.swift */; };
+		D0F3845829A090F100D5A91B /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3845629A090F100D5A91B /* Date+Ext.swift */; };
+		D0F3845B29A091F900D5A91B /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F3845929A091F900D5A91B /* Views.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +74,9 @@
 		D0F3844629A08B4700D5A91B /* Hydrateminder_Widget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Hydrateminder_Widget.intentdefinition; sourceTree = "<group>"; };
 		D0F3844729A08B4700D5A91B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0F3844929A08B4700D5A91B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D0F3845329A08CB100D5A91B /* Hydrateminder-WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Hydrateminder-WidgetExtension.entitlements"; sourceTree = "<group>"; };
+		D0F3845629A090F100D5A91B /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
+		D0F3845929A091F900D5A91B /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
 		D0F66816299C1ABB00568D80 /* Debug.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Debug.storekit; sourceTree = "<group>"; };
 		D0F66817299C1AD500568D80 /* Production.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Production.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,6 +104,7 @@
 		D02DAE80298DE1DC00AF3512 = {
 			isa = PBXGroup;
 			children = (
+				D0F3845329A08CB100D5A91B /* Hydrateminder-WidgetExtension.entitlements */,
 				D02DAE8B298DE1DC00AF3512 /* Hydrateminder */,
 				D0F3843F29A08B4700D5A91B /* Hydrateminder-Widget */,
 				D0F3843A29A08B4700D5A91B /* Frameworks */,
@@ -126,6 +135,7 @@
 				D02DAEA0298DE23900AF3512 /* MainView.swift */,
 				D0F66816299C1ABB00568D80 /* Debug.storekit */,
 				D0F66817299C1AD500568D80 /* Production.storekit */,
+				D0F3845629A090F100D5A91B /* Date+Ext.swift */,
 			);
 			path = Hydrateminder;
 			sourceTree = "<group>";
@@ -156,6 +166,7 @@
 				D0F3844629A08B4700D5A91B /* Hydrateminder_Widget.intentdefinition */,
 				D0F3844729A08B4700D5A91B /* Assets.xcassets */,
 				D0F3844929A08B4700D5A91B /* Info.plist */,
+				D0F3845929A091F900D5A91B /* Views.swift */,
 			);
 			path = "Hydrateminder-Widget";
 			sourceTree = "<group>";
@@ -266,6 +277,7 @@
 				D02DAE8F298DE1DC00AF3512 /* ContentView.swift in Sources */,
 				D02DAE99298DE1DE00AF3512 /* Hydrateminder.xcdatamodeld in Sources */,
 				D02DAEA1298DE23900AF3512 /* MainView.swift in Sources */,
+				D0F3845729A090F100D5A91B /* Date+Ext.swift in Sources */,
 				D02DAE8D298DE1DC00AF3512 /* HydrateminderApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -274,10 +286,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0F3845529A090C600D5A91B /* Hydrateminder.xcdatamodeld in Sources */,
 				D0F3844129A08B4700D5A91B /* Hydrateminder_WidgetBundle.swift in Sources */,
 				D0F3844A29A08B4700D5A91B /* Hydrateminder_Widget.intentdefinition in Sources */,
 				D0F3844529A08B4700D5A91B /* Hydrateminder_Widget.swift in Sources */,
+				D0F3845B29A091F900D5A91B /* Views.swift in Sources */,
 				D0F3844329A08B4700D5A91B /* Hydrateminder_WidgetLiveActivity.swift in Sources */,
+				D0F3845829A090F100D5A91B /* Date+Ext.swift in Sources */,
+				D0F3845429A090B900D5A91B /* Persistence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,6 +489,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Hydrateminder-WidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 562HEMPPEX;
@@ -500,6 +517,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Hydrateminder-WidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 562HEMPPEX;

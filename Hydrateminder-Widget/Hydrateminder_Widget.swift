@@ -44,7 +44,10 @@ struct Hydrateminder_WidgetEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        Text(entry.date, style: .time)
+//        Text(entry.date, style: .time)
+        VStack {
+            MonthView(calendar: Calendar.current, month: entry.date)
+        }
     }
 }
 
@@ -63,6 +66,7 @@ struct Hydrateminder_Widget: Widget {
 struct Hydrateminder_Widget_Previews: PreviewProvider {
     static var previews: some View {
         Hydrateminder_WidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+            .previewContext(WidgetPreviewContext(family: .systemLarge))
+//            .preferredColorScheme(.dark)
     }
 }

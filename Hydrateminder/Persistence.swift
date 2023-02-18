@@ -9,6 +9,11 @@ import CoreData
 
 struct PersistenceController {
     static let shared = PersistenceController()
+    
+    var sharedStoreURL: URL {
+        let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.tech.justins.Hydrateminder")
+        return container!.appendingPathComponent("Hydrateminder", conformingTo: .database)
+    }
 
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
@@ -54,6 +59,10 @@ struct PersistenceController {
         container = NSPersistentCloudKitContainer(name: "Hydrateminder")
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+        }
+        else {
+            // this should be working correctly.
+            container.persistentStoreDescriptions.first!.url = sharedStoreURL
         }
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {

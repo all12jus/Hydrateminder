@@ -14,12 +14,24 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         
-        let newItem = Consumption(context: viewContext)
-        newItem.date = .now
-        newItem.goal = 64
-        newItem.consumed = 8
+//        let newItem = Consumption(context: viewContext)
+//        newItem.date = .now
+//        newItem.goal = 64
+//        newItem.consumed = 8
+//
+//        let newItem2 = Consumption(context: viewContext)
+//        newItem2.date = .now.dayBefore
+//        newItem2.goal = 64
+//        newItem2.consumed = 64
         
-        
+        let startDate = Date.now.startOfMonth
+        for day in 0..<Date.now.day{
+            let newItem2 = Consumption(context: viewContext)
+            let dayDate = Calendar.current.date(byAdding: .day, value: day, to: startDate)
+            newItem2.date = dayDate
+            newItem2.goal = 64
+            newItem2.consumed = Double(Int.random(in: 0..<64))
+        }
         
 //        for _ in 0..<10 {
 //            let newItem = Item(context: viewContext)
